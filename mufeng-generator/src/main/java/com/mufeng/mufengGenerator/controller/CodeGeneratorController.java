@@ -42,7 +42,7 @@ public class CodeGeneratorController {
      */
     @GetMapping("/tables/{dbType}")
     public Page<String> getTables(
-            @PathVariable String dbType,
+            @PathVariable String dbType ,
             @Valid PageRequest pageRequest) {
 //        return codeGeneratorService.getTables(dbType, pageRequest);
         return null;
