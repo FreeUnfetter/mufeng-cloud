@@ -1,8 +1,10 @@
 package com.mufeng.mufengGenerator.controller;
 
-import com.mufeng.mufengGenerator.domain.dto.CodeGenerateDto;
+import com.mufeng.mufengCommon.entity.RespResult;
 import com.mufeng.mufengGenerator.domain.dto.PageRequest;
-import com.mufeng.mufengGenerator.service.CodeGeneratorService;
+import com.mufeng.mufengGenerator.domain.entity.DatabaseConfig;
+import com.mufeng.mufengGenerator.service.DatabaseMetadataService;
+import com.mufeng.mufengGenerator.service.factory.DatabaseMetadataServiceFactory;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -25,8 +27,13 @@ import java.util.Map;
 @RequestMapping("/generator")
 public class CodeGeneratorController {
 
-    private final CodeGeneratorService codeGeneratorService;
+    private final DatabaseMetadataServiceFactory serviceFactory;
 
+    @GetMapping("/connection")
+    public RespResult createConnection(@Valid @RequestBody DatabaseConfig databaseConfig) {
+        DatabaseMetadataService service = serviceFactory.getService(databaseConfig.getDataType());
+        return service.createConnection(databaseConfig);
+    }
     /**
      * 数据库表信息列表
      * @param dbType 数据库类型
@@ -56,35 +63,35 @@ public class CodeGeneratorController {
     }
 
 
-    /**
-     * 代码生成
-     *
-     * @param dto
-     * @return
-     * @throws IOException
-     */
-    @PostMapping("/generate")
-    public ResponseEntity<InputStreamResource> generateCode(@Valid @RequestBody CodeGenerateDto dto) throws IOException {
-        String zipFilePath = codeGeneratorService.generateCode(dto);
+//    /**
+//     * 代码生成
+//     *
+//     * @param dto
+//     * @return
+//     * @throws IOException
+//     */
+//    @PostMapping("/generate")
+//    public ResponseEntity<InputStreamResource> generateCode(@Valid @RequestBody CodeGenerateDto dto) throws IOException {
+//        String zipFilePath = codeGeneratorService.generateCode(dto);
+//
+//        File zipFile = new File(zipFilePath);
+//        InputStreamResource resource = new InputStreamResource(new FileInputStream(zipFile));
+//
+//        return ResponseEntity.ok()
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=generated-code.zip")
+//                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+//                .contentLength(zipFile.length())
+//                .body(resource);
+//    }
 
-        File zipFile = new File(zipFilePath);
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(zipFile));
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=generated-code.zip")
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .contentLength(zipFile.length())
-                .body(resource);
-    }
-
-    /**
-     * 代码预览
-     *
-     * @param dto
-     * @return
-     */
-    @PostMapping("/preview")
-    public Map<String, String> previewCode(@Valid @RequestBody CodeGenerateDto dto) {
-        return codeGeneratorService.previewCode(dto);
-    }
+//    /**
+//     * 代码预览
+//     *
+//     * @param dto
+//     * @return
+//     */
+//    @PostMapping("/preview")
+//    public Map<String, String> previewCode(@Valid @RequestBody CodeGenerateDto dto) {
+//        return codeGeneratorService.previewCode(dto);
+//    }
 }

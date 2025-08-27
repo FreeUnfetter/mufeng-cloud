@@ -1,12 +1,16 @@
 package com.mufeng.mufengGenerator.service;
 
+import com.mufeng.mufengCommon.entity.RespResult;
 import com.mufeng.mufengGenerator.domain.dto.PageRequest;
+import com.mufeng.mufengGenerator.domain.entity.DatabaseConfig;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Map;
 
 public interface DatabaseMetadataService {
+
+    RespResult createConnection(DatabaseConfig databaseConfig);
 
     /**
      * 获取数据库表列表
@@ -15,7 +19,6 @@ public interface DatabaseMetadataService {
      * @return
      */
     Page<String> getTables(PageRequest pageRequest);
-
 
     /**
      * 获取表字段信息

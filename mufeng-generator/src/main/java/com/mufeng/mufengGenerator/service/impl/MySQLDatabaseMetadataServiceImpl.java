@@ -1,5 +1,7 @@
 package com.mufeng.mufengGenerator.service.impl;
 
+import com.mufeng.mufengCommon.entity.RespResult;
+import com.mufeng.mufengGenerator.database.MySQLDruidConnectionManager;
 import com.mufeng.mufengGenerator.domain.dto.PageRequest;
 import com.mufeng.mufengGenerator.domain.entity.DatabaseConfig;
 import com.mufeng.mufengGenerator.service.DatabaseMetadataService;
@@ -14,21 +16,12 @@ import java.util.Map;
 @Service
 public class MySQLDatabaseMetadataServiceImpl implements DatabaseMetadataService {
 
-//    private final DatabaseConfig databaseConfig;
-    private JdbcTemplate jdbcTemplate;
-
-//    public MySQLDatabaseMetadataServiceImpl(DatabaseConfig databaseConfig) {
-//        this.databaseConfig = databaseConfig;
-//        initializeJdbcTemplate();
-//    }
-
-    private void initializeJdbcTemplate() {
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-//        dataSource.setUrl(databaseConfig.getMysqlUrl());
-//        dataSource.setUsername(databaseConfig.getMysqlUsername());
-//        dataSource.setPassword(databaseConfig.getMysqlPassword());
-//        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    @Override
+    public RespResult createConnection(DatabaseConfig databaseConfig) {
+        MySQLDruidConnectionManager connectionManager = MySQLDruidConnectionManager.getInstance();
+        return connectionManager.testConnection()
+                ? RespResult.success("数据库连接成功")
+                : RespResult.error(501,"数据库连接失败");
     }
 
     @Override

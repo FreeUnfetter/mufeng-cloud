@@ -16,17 +16,17 @@ public class DatabaseConfig {
     private String id;
     /** 用户id */
     private String userId;
-    /** 数据库url */
-    @NotBlank(message = "姓名不能为空")
-    private String dbUrl;
+    /** 数据库ip */
+    @NotBlank(message = "数据库ip不能为空")
+    private String dbHost;
     /** 数据库用户名 */
-    @NotBlank(message = "姓名不能为空")
+    @NotBlank(message = "数据库用户名不能为空")
     private String dbUserName;
     /** 数据库密码 */
-    @NotBlank(message = "姓名不能为空")
+    @NotBlank(message = "数据库密码不能为空")
     private String dbPassword;
     /** 数据库端口 */
-    @NotBlank(message = "姓名不能为空")
+    @NotBlank(message = "数据库端口不能为空")
     private String dbPort;
     /** 数据库备注 */
     private String dbComment;

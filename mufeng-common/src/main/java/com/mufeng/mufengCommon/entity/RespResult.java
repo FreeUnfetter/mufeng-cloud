@@ -18,6 +18,10 @@ public class RespResult<T> implements Serializable {
         return new RespResult<>(200, "成功", data);
     }
 
+    public static <T> RespResult<T> success(String message) {
+        return new RespResult<>(200, message, null);
+    }
+
     public static <T> RespResult<T> error(Integer code, String message) {
         return new RespResult<>(code, message, null);
     }
