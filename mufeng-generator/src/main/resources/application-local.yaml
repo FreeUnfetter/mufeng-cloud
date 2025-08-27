@@ -1,0 +1,9 @@
+mf:
+  db:
+    host: localhost
+    schema: mufeng-cloud
+    un: root
+    pw: 123456
+  jpa:
+    show-sql: true
+    ddl-auto: create-drop

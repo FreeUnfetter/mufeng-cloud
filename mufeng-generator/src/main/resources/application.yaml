@@ -1,0 +1,49 @@
+server:
+  port: 7071
+spring:
+  application:
+    name: mufeng-generator
+  profiles:
+    active: local
+  # 数据源
+  datasource:
+    druid:
+      stat-view-servlet:
+        enabled: true # 启用 StatViewServlet
+        login-username: admin # 可选，设置监控页登录密码
+        login-password: admin
+        url-pattern: /druid/*
+      web-stat-filter:
+        enabled: true # 启用 WebStatFilter
+    url: jdbc:mysql://${mf.db.host}:3306/${mf.db.schema}?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${mf.db.un:root}
+    password: ${mf.db.pw}
+
+  jpa:
+    show-sql: ${mf.jpa.show-sql}
+    hibernate:
+      ddl-auto: ${mf.jpa.ddl-auto}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect # 推荐使用MySQL8Dialect
+        # 配置下划线命名策略
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+          implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        jdbc:
+          time_zone: Asia/Shanghai # 设置JVM和数据库会话的时区
+
+  freemarker:
+    template-loader-path: classpath:/templates/
+    suffix: .ftl
+    charset: UTF-8
+logging:
+  level:
+    # 显示SQL语句和参数
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.mufeng: DEBUG
+
+codegen:
+  output-dir: generated-code/

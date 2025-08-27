@@ -1,0 +1,9 @@
+mf:
+  db:
+    host: localhost
+    schema: shop_order
+    un: root
+    pw: 123456
+  jpa:
+    show-sql: false
+    ddl-auto: validate
