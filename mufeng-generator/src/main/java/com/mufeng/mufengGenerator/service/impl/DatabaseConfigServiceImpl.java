@@ -1,7 +1,7 @@
 package com.mufeng.mufengGenerator.service.impl;
 
 import com.mufeng.mufengGenerator.domain.entity.DatabaseConfig;
-import com.mufeng.mufengGenerator.mapper.DatabaseConfigRepository;
+import com.mufeng.mufengGenerator.Repository.DatabaseConfigRepository;
 import com.mufeng.mufengGenerator.service.DatabaseConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

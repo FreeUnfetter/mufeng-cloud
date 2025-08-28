@@ -28,6 +28,9 @@ public class DatabaseConfig {
     /** 数据库端口 */
     @NotBlank(message = "数据库端口不能为空")
     private String dbPort;
+    /** 数据库名称 */
+    @NotBlank(message = "数据库名称不能为空")
+    private String dbName;
     /** 数据库备注 */
     private String dbComment;
     /** 数据库类型 */

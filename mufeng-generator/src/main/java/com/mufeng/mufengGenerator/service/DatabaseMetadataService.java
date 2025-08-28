@@ -2,7 +2,10 @@ package com.mufeng.mufengGenerator.service;
 
 import com.mufeng.mufengCommon.entity.RespResult;
 import com.mufeng.mufengGenerator.domain.dto.PageRequest;
+import com.mufeng.mufengGenerator.domain.dto.PageResult;
+import com.mufeng.mufengGenerator.domain.entity.ColumnInfo;
 import com.mufeng.mufengGenerator.domain.entity.DatabaseConfig;
+import com.mufeng.mufengGenerator.domain.entity.TableInfo;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -10,7 +13,13 @@ import java.util.Map;
 
 public interface DatabaseMetadataService {
 
-    RespResult createConnection(DatabaseConfig databaseConfig);
+    /**
+     * 测试连接
+     *
+     * @param databaseConfig
+     * @return
+     */
+    RespResult createConnection(DatabaseConfig databaseConfig) throws Exception;
 
     /**
      * 获取数据库表列表
@@ -18,15 +27,15 @@ public interface DatabaseMetadataService {
      * @param pageRequest
      * @return
      */
-    Page<String> getTables(PageRequest pageRequest);
+    PageResult<TableInfo> getTables(PageRequest pageRequest) throws Exception;
 
     /**
      * 获取表字段信息
      *
-     * @param tableName
+     * @param pageRequest
      * @return
      */
-    List<Map<String, Object>> getTableColumns(String tableName);
+    PageResult<ColumnInfo> getTableColumns(PageRequest pageRequest);
 
     /**
      * 校验

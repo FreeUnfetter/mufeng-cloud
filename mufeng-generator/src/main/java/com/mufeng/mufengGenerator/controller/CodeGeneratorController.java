@@ -2,22 +2,21 @@ package com.mufeng.mufengGenerator.controller;
 
 import com.mufeng.mufengCommon.entity.RespResult;
 import com.mufeng.mufengGenerator.domain.dto.PageRequest;
+import com.mufeng.mufengGenerator.domain.dto.PageResult;
+import com.mufeng.mufengGenerator.domain.entity.ColumnInfo;
 import com.mufeng.mufengGenerator.domain.entity.DatabaseConfig;
+import com.mufeng.mufengGenerator.domain.entity.TableInfo;
+import com.mufeng.mufengGenerator.service.CodeGeneratorService;
 import com.mufeng.mufengGenerator.service.DatabaseMetadataService;
 import com.mufeng.mufengGenerator.service.factory.DatabaseMetadataServiceFactory;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -29,69 +28,62 @@ public class CodeGeneratorController {
 
     private final DatabaseMetadataServiceFactory serviceFactory;
 
-    @GetMapping("/connection")
-    public RespResult createConnection(@Valid @RequestBody DatabaseConfig databaseConfig) {
-        DatabaseMetadataService service = serviceFactory.getService(databaseConfig.getDataType());
+    /**
+     * 数据库连接测试
+     *
+     * @param databaseConfig 数据库连接信息
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/connection")
+    public RespResult createConnection(@Valid @RequestBody DatabaseConfig databaseConfig) throws Exception {
+        DatabaseMetadataService service = serviceFactory.getMetaService(databaseConfig.getDataType());
         return service.createConnection(databaseConfig);
     }
+
     /**
      * 数据库表信息列表
-     * @param dbType 数据库类型
-     * @param pageRequest 表名
-     * @return
+     *
      */
-    @GetMapping("/tables/{dbType}")
-    public Page<String> getTables(
-            @PathVariable String dbType ,
-            @Valid PageRequest pageRequest) {
-//        return codeGeneratorService.getTables(dbType, pageRequest);
-        return null;
+    @PostMapping("/tables")
+    public PageResult<TableInfo> getTables(@Valid @RequestBody PageRequest pageRequest) throws Exception {
+        DatabaseMetadataService service = serviceFactory.getMetaService(pageRequest.getDataType());
+        return service.getTables(pageRequest);
     }
 
     /**
      * 数据库表字段信息列表
-     * @param dbType 数据库类型
-     * @param tableName 表名
-     * @return
+     *
      */
-    @GetMapping("/columns/{dbType}/{tableName}")
-    public List<Map<String, Object>> getTableColumns(
-            @PathVariable String dbType,
-            @PathVariable String tableName) {
-//        return codeGeneratorService.getTableColumns(dbType, tableName);
-        return null;
+    @PostMapping("/columns")
+    public PageResult<ColumnInfo> getTableColumns(@Valid @RequestBody PageRequest pageRequest){
+        DatabaseMetadataService service = serviceFactory.getMetaService(pageRequest.getDataType());
+        return service.getTableColumns(pageRequest);
     }
 
 
-//    /**
-//     * 代码生成
-//     *
-//     * @param dto
-//     * @return
-//     * @throws IOException
-//     */
-//    @PostMapping("/generate")
-//    public ResponseEntity<InputStreamResource> generateCode(@Valid @RequestBody CodeGenerateDto dto) throws IOException {
-//        String zipFilePath = codeGeneratorService.generateCode(dto);
-//
-//        File zipFile = new File(zipFilePath);
-//        InputStreamResource resource = new InputStreamResource(new FileInputStream(zipFile));
-//
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=generated-code.zip")
-//                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-//                .contentLength(zipFile.length())
-//                .body(resource);
-//    }
+    /**
+     * 生成代码并打包
+     *
+     * @param tableInfos
+     * @param response
+     * @throws SQLException
+     * @throws IOException
+     */
+    @PostMapping("/generate")
+    public void generateCode(@RequestBody List<TableInfo> tableInfos, HttpServletResponse response) throws Exception {
+        CodeGeneratorService service = serviceFactory.getCodeService(tableInfos.get(0).getDataType());
+        service.generateCode(tableInfos, response);
+    }
 
-//    /**
-//     * 代码预览
-//     *
-//     * @param dto
-//     * @return
-//     */
-//    @PostMapping("/preview")
-//    public Map<String, String> previewCode(@Valid @RequestBody CodeGenerateDto dto) {
-//        return codeGeneratorService.previewCode(dto);
-//    }
+    /**
+     * 代码预览
+     *
+     * @return
+     */
+    @PostMapping("/preview")
+    public Map<String, String> previewCode() {
+        //TODO
+        return null;
+    }
 }

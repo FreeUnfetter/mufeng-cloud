@@ -2,13 +2,16 @@ package com.mufeng.mufengGenerator.database;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
+import com.alibaba.druid.pool.DruidPooledConnection;
+import com.mufeng.mufengGenerator.domain.entity.ColumnInfo;
+import com.mufeng.mufengGenerator.domain.entity.TableInfo;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.locks.ReentrantLock;
+
 
 public class MySQLDruidConnectionManager {
     // Druid数据源
@@ -17,7 +20,7 @@ public class MySQLDruidConnectionManager {
 
     // 当前连接配置
     private String currentHost;
-    private int currentPort;
+    private String currentPort;
     private String currentDatabase;
     private String currentUsername;
     private String currentPassword;
@@ -43,9 +46,16 @@ public class MySQLDruidConnectionManager {
     }
 
     /**
-     * 初始化数据库连接池
+     * 初始化数据连接池
+     *
+     * @param host 主机
+     * @param port 端口
+     * @param database 数据库名称
+     * @param username 用户名
+     * @param password 密码
+     * @return
      */
-    public void initializeConnection(String host, int port, String database,
+    public void initializeConnection(String host, String port, String database,
                                      String username, String password) throws Exception {
         lock.lock();
         try {
@@ -75,9 +85,78 @@ public class MySQLDruidConnectionManager {
     }
 
     /**
+     * 查询数据库所有表信息
+     */
+    public List<TableInfo> getTableInfo() throws Exception{
+        DruidPooledConnection connection = dataSource.getConnection();
+        DatabaseMetaData metaData = connection.getMetaData();
+        ResultSet rs = metaData.getTables(null, null, "%", new String[]{"TABLE"});
+
+        List<TableInfo> tableInfos = new ArrayList<>();
+        while (rs.next()) {
+            String tableName = rs.getString("TABLE_NAME");
+            String tableType = rs.getString("TABLE_TYPE");
+            String remarks = rs.getString("REMARKS");
+
+            TableInfo tableInfo = new TableInfo();
+            tableInfo.setTableName(tableName);
+            tableInfo.setTableType(tableType);
+            tableInfo.setTableRemarks(remarks);
+
+            tableInfos.add(tableInfo);
+        }
+
+        return tableInfos;
+    }
+
+    /**
+     * 查询表所有字段信息
+     */
+    public List<ColumnInfo> getTableColumns(String dbName) {
+        List<ColumnInfo> columns = new ArrayList<>();
+
+        try (Connection conn = dataSource.getConnection()) {
+
+            DatabaseMetaData metaData = conn.getMetaData();
+            String catalog = conn.getCatalog();
+
+            // 获取列信息
+            ResultSet columnRs = metaData.getColumns(catalog, null, dbName, null);
+
+            while (columnRs.next()) {
+                ColumnInfo column = new ColumnInfo();
+                column.setColumnName(columnRs.getString("COLUMN_NAME"));
+                column.setDataType(columnRs.getString("TYPE_NAME"));
+
+                // 处理备注信息
+                String remarks = columnRs.getString("REMARKS");
+                if (remarks == null) {
+                    remarks = columnRs.getString("COLUMN_COMMENT");
+                }
+                column.setColumnComment(remarks);
+
+                columns.add(column);
+            }
+
+            // 获取主键
+            ResultSet pkRs = metaData.getPrimaryKeys(catalog, null, dbName);
+            while (pkRs.next()) {
+                String pkColumn = pkRs.getString("COLUMN_NAME");
+                columns.stream()
+                        .filter(c -> c.getColumnName().equals(pkColumn))
+                        .forEach(c -> c.setColumnKey("PRI"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return columns;
+    }
+
+    /**
      * 创建Druid数据源
      */
-    private void createDataSource(String host, int port, String database,
+    private void createDataSource(String host, String port, String database,
                                   String username, String password) throws Exception {
         Properties properties = new Properties();
         String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
@@ -109,17 +188,15 @@ public class MySQLDruidConnectionManager {
         dataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
     }
 
-    /**
-     * 检查连接池是否有效
-     */
+
+
+    /** 检查连接池是否有效 */
     private boolean isPoolValid() {
         return dataSource != null && !dataSource.isClosed();
     }
 
-    /**
-     * 检查连接信息是否相同
-     */
-    private boolean isSameConnection(String host, int port, String database,
+    /** 检查连接信息是否相同 */
+    private boolean isSameConnection(String host, String port, String database,
                                      String username, String password) {
         return host.equals(currentHost) &&
                 port == currentPort &&
@@ -128,9 +205,7 @@ public class MySQLDruidConnectionManager {
                 password.equals(currentPassword);
     }
 
-    /**
-     * 获取数据库连接
-     */
+    /** 获取数据库连接 */
     public Connection getConnection() throws SQLException {
         lock.lock();
         try {
@@ -143,9 +218,7 @@ public class MySQLDruidConnectionManager {
         }
     }
 
-    /**
-     * 关闭数据源
-     */
+    /** 关闭数据源 */
     public void closeDataSource() {
         lock.lock();
         try {
@@ -161,9 +234,7 @@ public class MySQLDruidConnectionManager {
         }
     }
 
-    /**
-     * 测试连接
-     */
+    /** 测试连接 */
     public boolean testConnection() {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT 1");
@@ -175,9 +246,7 @@ public class MySQLDruidConnectionManager {
         }
     }
 
-    /**
-     * 获取连接池状态信息
-     */
+    /** 获取连接池状态信息 */
     public String getPoolStatus() {
         if (dataSource == null) {
             return "连接池未初始化";
@@ -192,9 +261,7 @@ public class MySQLDruidConnectionManager {
         );
     }
 
-    /**
-     * 重置连接管理器
-     */
+    /** 重置连接管理器 */
     public void reset() {
         lock.lock();
         try {
@@ -203,10 +270,9 @@ public class MySQLDruidConnectionManager {
             currentUsername = null;
             currentPassword = null;
             currentDatabase = null;
-            currentPort = 0;
+            currentPort = null;
         } finally {
             lock.unlock();
         }
     }
-
 }
