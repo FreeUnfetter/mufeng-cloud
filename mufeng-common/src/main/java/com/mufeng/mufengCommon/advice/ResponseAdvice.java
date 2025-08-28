@@ -18,6 +18,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     /**
      * 判断哪些请求需要被拦截并进行封装
+     *
      * @return true: 执行 beforeBodyWrite; false: 不执行
      */
     @Override

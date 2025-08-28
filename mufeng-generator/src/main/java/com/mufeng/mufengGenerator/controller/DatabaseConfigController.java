@@ -1,11 +1,10 @@
 package com.mufeng.mufengGenerator.controller;
 
+import com.mufeng.mufengCommon.entity.RespResult;
 import com.mufeng.mufengGenerator.domain.entity.DatabaseConfig;
 import com.mufeng.mufengGenerator.service.DatabaseConfigService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,8 +15,29 @@ public class DatabaseConfigController {
 
     private final DatabaseConfigService databaseConfigService;
 
-    @GetMapping("/list")
-    public List<DatabaseConfig> getDatabaseConfigList() {
-        return databaseConfigService.getDatabaseConfigList();
+    @GetMapping
+    public RespResult<List<DatabaseConfig>> findList() {
+        return RespResult.success(databaseConfigService.findAll());
+    }
+
+    @GetMapping("{id}")
+    public RespResult<DatabaseConfig> findById(@PathVariable String id) {
+        return RespResult.success(databaseConfigService.findById(id));
+    }
+
+    @PostMapping
+    public RespResult<DatabaseConfig> save(@RequestBody DatabaseConfig databaseConfig) {
+        return RespResult.success(databaseConfigService.save(databaseConfig));
+    }
+
+    @PutMapping
+    public RespResult<DatabaseConfig> update(@RequestBody DatabaseConfig databaseConfig) {
+        return RespResult.success(databaseConfigService.update(databaseConfig));
+    }
+
+    @DeleteMapping("{id}")
+    public void delete(@PathVariable String id) {
+        databaseConfigService.delete(id);
+        RespResult.success("删除");
     }
 }

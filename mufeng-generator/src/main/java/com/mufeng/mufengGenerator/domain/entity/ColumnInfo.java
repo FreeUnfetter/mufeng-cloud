@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class ColumnInfo {
     private String columnName;
-    private String dataType;
+    private String columnType;
     private String columnComment;
     private String columnKey; // PRI表示主键
 }

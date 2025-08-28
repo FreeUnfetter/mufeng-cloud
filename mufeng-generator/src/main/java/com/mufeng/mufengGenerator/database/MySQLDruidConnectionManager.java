@@ -87,10 +87,10 @@ public class MySQLDruidConnectionManager {
     /**
      * 查询数据库所有表信息
      */
-    public List<TableInfo> getTableInfo() throws Exception{
+    public List<TableInfo> getTableInfo(String dbName) throws Exception{
         DruidPooledConnection connection = dataSource.getConnection();
         DatabaseMetaData metaData = connection.getMetaData();
-        ResultSet rs = metaData.getTables(null, null, "%", new String[]{"TABLE"});
+        ResultSet rs = metaData.getTables(dbName, null, "%", new String[]{"TABLE"});
 
         List<TableInfo> tableInfos = new ArrayList<>();
         while (rs.next()) {
@@ -106,13 +106,15 @@ public class MySQLDruidConnectionManager {
             tableInfos.add(tableInfo);
         }
 
+        rs.close();
+
         return tableInfos;
     }
 
     /**
      * 查询表所有字段信息
      */
-    public List<ColumnInfo> getTableColumns(String dbName) {
+    public List<ColumnInfo> getTableColumns(String tableName) {
         List<ColumnInfo> columns = new ArrayList<>();
 
         try (Connection conn = dataSource.getConnection()) {
@@ -121,12 +123,12 @@ public class MySQLDruidConnectionManager {
             String catalog = conn.getCatalog();
 
             // 获取列信息
-            ResultSet columnRs = metaData.getColumns(catalog, null, dbName, null);
+            ResultSet columnRs = metaData.getColumns(catalog, null, tableName, null);
 
             while (columnRs.next()) {
                 ColumnInfo column = new ColumnInfo();
                 column.setColumnName(columnRs.getString("COLUMN_NAME"));
-                column.setDataType(columnRs.getString("TYPE_NAME"));
+                column.setColumnType(columnRs.getString("TYPE_NAME"));
 
                 // 处理备注信息
                 String remarks = columnRs.getString("REMARKS");
@@ -139,13 +141,15 @@ public class MySQLDruidConnectionManager {
             }
 
             // 获取主键
-            ResultSet pkRs = metaData.getPrimaryKeys(catalog, null, dbName);
+            ResultSet pkRs = metaData.getPrimaryKeys(catalog, null, tableName);
             while (pkRs.next()) {
                 String pkColumn = pkRs.getString("COLUMN_NAME");
                 columns.stream()
                         .filter(c -> c.getColumnName().equals(pkColumn))
                         .forEach(c -> c.setColumnKey("PRI"));
             }
+
+            columnRs.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

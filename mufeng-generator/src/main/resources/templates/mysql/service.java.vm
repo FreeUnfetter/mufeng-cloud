@@ -1,0 +1,40 @@
+package ${table.packageName}.service;
+
+import ${table.packageName}.entity.${tableNameHigher};
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import java.util.List;
+
+/**
+ * ${table.comments}
+ *
+ * @author mufeng
+ * @date ${table.date}
+ */
+public interface ${tableNameHigher}Service {
+
+    /**
+     * 通过ID查询
+     */
+     ${tableNameHigher} findById(String id);
+
+    /**
+     * 查询所有
+     */
+    List<${tableNameHigher}> findAll();
+
+    /**
+     * 新增
+     */
+     ${tableNameHigher} save(${tableNameHigher} ${tableNameLower});
+
+    /**
+     * 修改
+     */
+     ${tableNameHigher} update(${tableNameHigher} ${tableNameLower});
+
+    /**
+     * 删除
+     */
+    void delete(String id);
+}

@@ -1,0 +1,55 @@
+package ${table.packageName}.service.impl;
+
+import ${table.packageName}.entity.${tableNameHigher};
+import ${table.packageName}.repository.${tableNameHigher}Repository;
+import ${table.packageName}.service.${tableNameHigher}Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * ${table.comments}
+ *
+ * @author mufeng
+ * @date ${table.date}
+ */
+@Service
+@RequiredArgsConstructor
+public class ${tableNameHigher}ServiceImpl implements ${tableNameHigher}Service {
+
+    private final ${tableNameHigher}Repository ${tableNameLower}Repository;
+
+    @Override
+    public ${tableNameHigher} findById(String id) {
+        Optional<${tableNameHigher}> optional = ${tableNameHigher}Repository.findById(id);
+        return optional.orElse(null);
+    }
+
+    @Override
+    public List<${tableNameHigher}> findAll() {
+        return ${tableNameHigher}Repository.findAll();
+    }
+
+    @Override
+    public ${tableNameHigher} save(${tableNameHigher} ${tableNameLower}) {
+        return ${tableNameHigher}Repository.save(${tableNameLower});
+    }
+
+    @Override
+    public ${tableNameHigher} update(${tableNameHigher} ${tableNameLower}) {
+        return ${tableNameHigher}Repository.save(${tableNameLower});
+    }
+
+    @Override
+    public void delete(String id) {
+        ${tableNameHigher}Repository.deleteById(id);
+    }
+}

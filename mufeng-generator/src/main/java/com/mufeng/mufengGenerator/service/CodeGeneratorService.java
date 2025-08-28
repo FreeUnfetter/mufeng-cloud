@@ -12,7 +12,7 @@ public interface CodeGeneratorService {
      *
      * @return
      */
-    String generateCode(List<TableInfo> tableInfos, HttpServletResponse response) throws Exception;
+    void generateCode(List<TableInfo> tableInfos, HttpServletResponse response) throws Exception;
 
 
     /**

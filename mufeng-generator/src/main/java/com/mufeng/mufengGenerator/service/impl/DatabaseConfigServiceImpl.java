@@ -1,10 +1,11 @@
 package com.mufeng.mufengGenerator.service.impl;
 
 import com.mufeng.mufengGenerator.domain.entity.DatabaseConfig;
-import com.mufeng.mufengGenerator.Repository.DatabaseConfigRepository;
+import com.mufeng.mufengGenerator.repository.DatabaseConfigRepository;
 import com.mufeng.mufengGenerator.service.DatabaseConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -16,7 +17,29 @@ public class DatabaseConfigServiceImpl implements DatabaseConfigService {
 
 
     @Override
-    public List<DatabaseConfig> getDatabaseConfigList() {
+    public List<DatabaseConfig> findAll() {
         return databaseConfigRepository.findAll();
     }
+
+    @Override
+    public DatabaseConfig findById(@PathVariable String id) {
+        return databaseConfigRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public DatabaseConfig save(DatabaseConfig databaseConfig) {
+        return databaseConfigRepository.save(databaseConfig);
+    }
+
+    @Override
+    public DatabaseConfig update(DatabaseConfig databaseConfig) {
+        return databaseConfigRepository.save(databaseConfig);
+    }
+
+    @Override
+    public void delete(@PathVariable String id) {
+        databaseConfigRepository.deleteById(id);
+    }
+
+
 }

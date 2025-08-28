@@ -1,0 +1,66 @@
+package ${packageName}.service.impl;
+
+import ${packageName}.entity.${className};
+import ${packageName}.repository.${className}Repository;
+import ${packageName}.service.${className}Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @date ${date}
+ */
+@Service
+public class ${className}ServiceImpl implements ${className}Service {
+
+    @Autowired
+    private ${className}Repository ${classname}Repository;
+
+    @Override
+    public ${className} findById(String id) {
+        Optional<${className}> optional = ${classname}Repository.findById(id);
+        return optional.orElse(null);
+    }
+
+    @Override
+    public Page<${className}> findPage(Pageable pageable) {
+        return ${classname}Repository.findAll(pageable);
+    }
+
+    @Override
+    public List<${className}> findAll() {
+        return ${classname}Repository.findAll();
+    }
+
+    @Override
+    public ${className} save(${className} ${classname}) {
+        return ${classname}Repository.save(${classname});
+    }
+
+    @Override
+    public ${className} update(${className} ${classname}) {
+        // MongoDB中save方法既可新增也可修改
+        return ${classname}Repository.save(${classname});
+    }
+
+    @Override
+    public void delete(String id) {
+            ${classname}Repository.deleteById(id);
+    }
+
+    @Override
+    public Page<${className}> findByNameLike(String name, Pageable pageable) {
+        if (StringUtils.hasText(name)) {
+            return ${classname}Repository.findByNameLike(name, pageable);
+        } else {
+            return ${classname}Repository.findAll(pageable);
+        }
+    }
+}

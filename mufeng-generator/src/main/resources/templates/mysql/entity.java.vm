@@ -1,0 +1,47 @@
+package ${table.packageName}.entity;
+
+import lombok.Data;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+import java.math.BigDecimal;
+
+import java.time.LocalDateTime;
+
+
+/**
+ * ${table.comments}
+ *
+ * @author mufeng
+ * @date ${table.date}
+ */
+@Entity
+@Data
+@Table(name = "${table.tableName}")
+public class ${tableNameHigher} implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    #foreach($column in $table.columnHumps)
+    /**
+     * ${column.columnComment}
+     */
+    #if($column.columnKey == 'PRI')
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    #else
+    #end
+    private ${column.columnType} ${column.columnName};
+    #end
+
+    @PrePersist
+    protected void onCreate() {
+        createDate = LocalDateTime.now();
+        updateDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updateDate = LocalDateTime.now();
+    }
+}

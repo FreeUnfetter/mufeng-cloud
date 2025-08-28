@@ -6,6 +6,13 @@ import java.util.List;
 
 public interface DatabaseConfigService {
 
-    List<DatabaseConfig> getDatabaseConfigList();
+    List<DatabaseConfig> findAll();
 
+    DatabaseConfig findById(String id);
+
+    DatabaseConfig save(DatabaseConfig databaseConfig);
+
+    DatabaseConfig update(DatabaseConfig databaseConfig);
+
+    void delete(String id);
 }

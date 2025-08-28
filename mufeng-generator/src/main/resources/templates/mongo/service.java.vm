@@ -1,0 +1,50 @@
+package ${packageName}.service;
+
+import ${packageName}.entity.${className};
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import java.util.List;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @date ${date}
+ */
+public interface ${className}Service {
+
+    /**
+     * 通过ID查询
+     */
+        ${className} findById(String id);
+
+    /**
+     * 分页查询
+     */
+    Page<${className}> findPage(Pageable pageable);
+
+    /**
+     * 查询所有
+     */
+    List<${className}> findAll();
+
+    /**
+     * 新增
+     */
+        ${className} save(${className} ${classname});
+
+    /**
+     * 修改
+     */
+        ${className} update(${className} ${classname});
+
+    /**
+     * 删除
+     */
+    void delete(String id);
+
+    /**
+     * 根据名称模糊查询并分页
+     */
+    Page<${className}> findByNameLike(String name, Pageable pageable);
+}

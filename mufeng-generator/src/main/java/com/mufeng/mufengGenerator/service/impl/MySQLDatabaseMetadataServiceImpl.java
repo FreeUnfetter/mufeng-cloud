@@ -50,13 +50,13 @@ public class MySQLDatabaseMetadataServiceImpl implements DatabaseMetadataService
 
     @Override
     public PageResult<TableInfo> getTables(PageRequest pageRequest) throws Exception {
-        List<TableInfo> tableInfo = connectionManager.getTableInfo();
+        List<TableInfo> tableInfo = connectionManager.getTableInfo(pageRequest.getDbName());
         return PageUtils.paginate(tableInfo, pageRequest.getPageNum(), pageRequest.getPageSize());
     }
 
     @Override
     public PageResult<ColumnInfo> getTableColumns(PageRequest pageRequest) {
-        List<ColumnInfo> columnInfos = connectionManager.getTableColumns(pageRequest.getDbName());
+        List<ColumnInfo> columnInfos = connectionManager.getTableColumns(pageRequest.getTableName());
         return PageUtils.paginate(columnInfos, pageRequest.getPageNum(), pageRequest.getPageSize());
     }
 

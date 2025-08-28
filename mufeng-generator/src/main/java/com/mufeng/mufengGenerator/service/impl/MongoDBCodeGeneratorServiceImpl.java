@@ -10,8 +10,7 @@ import java.util.Map;
 public class MongoDBCodeGeneratorServiceImpl implements CodeGeneratorService {
 
     @Override
-    public String generateCode(List<TableInfo> tableInfos, HttpServletResponse response) {
-        return "";
+    public void generateCode(List<TableInfo> tableInfos, HttpServletResponse response) {
     }
 
     @Override

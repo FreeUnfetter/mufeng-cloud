@@ -1,0 +1,66 @@
+package ${packageName}.controller;
+
+import ${packageName}.entity.${className};
+import ${packageName}.service.${className}Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @date ${date}
+ */
+@RestController
+@RequestMapping("/api/${classname}")
+public class ${className}Controller {
+
+    @Autowired
+    private ${className}Service ${classname}Service;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<${className}> findById(@PathVariable String id) {
+        return ResponseEntity.ok(${classname}Service.findById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<${className>>> findPage(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(${classname}Service.findPage(pageable));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<${className}}}> search(
+        @RequestParam(required = false) String name,
+        @RequestParam(defaultValue = "0") Integer page,
+        @RequestParam(defaultValue = "10") Integer size) {
+    Pageable pageable = PageRequest.of(page, size);
+    return ResponseEntity.ok(${classname}Service.findByNameLike(name, pageable));
+    }
+
+    @PostMapping
+    public ResponseEntity<${className}> save(@RequestBody ${className} ${classname}) {
+        return ResponseEntity.ok(${classname}Service.save(${classname}));
+    }
+
+    @PutMapping
+    public ResponseEntity<${className}> update(@RequestBody ${className} ${classname}) {
+        return ResponseEntity.ok(${classname}Service.update(${classname}));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable String id) {
+            ${classname}Service.delete(id);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+    }
+}

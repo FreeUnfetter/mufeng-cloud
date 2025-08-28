@@ -3,7 +3,7 @@ CREATE TABLE database_config
     id          VARCHAR(100) PRIMARY KEY,
     user_id     VARCHAR(100) NOT NULL COMMENT '用户id',
     db_host     VARCHAR(100) NOT NULL COMMENT '数据库ip',
-    db_userName VARCHAR(100) NOT NULL COMMENT '数据库用户名',
+    db_user_name VARCHAR(100) NOT NULL COMMENT '数据库用户名',
     db_password VARCHAR(100) NOT NULL COMMENT '数据库密码',
     db_port     VARCHAR(100) NOT NULL COMMENT '数据库端口',
     db_name     VARCHAR(100) NOT NULL COMMENT '数据库名称',

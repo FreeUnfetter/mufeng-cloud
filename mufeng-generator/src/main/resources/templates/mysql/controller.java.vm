@@ -1,0 +1,55 @@
+package ${table.packageName}.controller;
+
+import ${table.packageName}.entity.${tableNameHigher};
+import ${table.packageName}.service.${tableNameHigher}Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import com.mufeng.mufengCommon.entity.RespResult;
+import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * ${table.comments}
+ *
+ * @author mufeng
+ * @date ${table.date}
+ */
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/${tableNameLower}")
+public class ${tableNameHigher}Controller {
+
+    private final ${tableNameHigher}Service ${tableNameLower}Service;
+
+    @GetMapping("/{id}")
+    public RespResult<${tableNameHigher}> findById(@PathVariable String id) {
+        return RespResult.success(${tableNameHigher}Service.findById(id));
+    }
+
+    @GetMapping("/list")
+    public RespResult<List<${tableNameHigher}>> findList() {
+        return RespResult.success(${tableNameHigher}Service.findAll());
+    }
+
+    @PostMapping
+    public RespResult<${tableNameHigher}> save(@RequestBody ${tableNameHigher} ${tableNameLower}) {
+        return RespResult.success(${tableNameHigher}Service.save(${tableNameLower}));
+    }
+
+    @PutMapping
+    public RespResult<${tableNameHigher}> update(@RequestBody ${tableNameHigher} ${tableNameLower}) {
+        return RespResult.success(${tableNameHigher}Service.update(${tableNameLower}));
+    }
+
+    @DeleteMapping("/{id}")
+    public RespResult<Map<String, Boolean>> delete(@PathVariable String id) {
+        ${tableNameHigher}Service.delete(id);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return RespResult.success(response);
+    }
+}

@@ -1,4 +1,4 @@
-package com.mufeng.mufengGenerator.Repository;
+package com.mufeng.mufengGenerator.repository;
 
 import com.mufeng.mufengGenerator.domain.entity.DatabaseConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
