@@ -1,18 +1,19 @@
 CREATE TABLE database_config
 (
-    id          VARCHAR(100) PRIMARY KEY,
-    user_id     VARCHAR(100) NOT NULL COMMENT '用户id',
-    db_host     VARCHAR(100) NOT NULL COMMENT '数据库ip',
+    id           VARCHAR(100) PRIMARY KEY,
+    user_id      VARCHAR(100) NOT NULL COMMENT '用户id',
+    db_host      VARCHAR(100) NOT NULL COMMENT '数据库ip',
     db_user_name VARCHAR(100) NOT NULL COMMENT '数据库用户名',
-    db_password VARCHAR(100) NOT NULL COMMENT '数据库密码',
-    db_port     VARCHAR(100) NOT NULL COMMENT '数据库端口',
-    db_name     VARCHAR(100) NOT NULL COMMENT '数据库名称',
-    db_comment  VARCHAR(100) COMMENT '数据库备注',
-    data_type   VARCHAR(100) NOT NULL COMMENT '数据库类型',
-    create_name VARCHAR(100) COMMENT '创建人',
-    create_date datetime COMMENT '创建时间',
-    update_name VARCHAR(100) COMMENT '更新人',
-    update_date datetime COMMENT '更新时间'
+    db_password  VARCHAR(100) NOT NULL COMMENT '数据库密码',
+    db_port      VARCHAR(100) NOT NULL COMMENT '数据库端口',
+    db_name      VARCHAR(100) NOT NULL COMMENT '数据库名称',
+    db_comment   VARCHAR(100) COMMENT '数据库备注',
+    data_type    VARCHAR(100) NOT NULL COMMENT '数据库类型',
+    create_name  VARCHAR(100) COMMENT '创建人',
+    create_date  datetime COMMENT '创建时间',
+    update_name  VARCHAR(100) COMMENT '更新人',
+    update_date  datetime COMMENT '更新时间',
+    version      INT COMMENT '版本控制'
 ) DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 

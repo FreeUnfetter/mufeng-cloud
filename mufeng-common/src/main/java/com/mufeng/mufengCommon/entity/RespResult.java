@@ -25,4 +25,8 @@ public class RespResult<T> implements Serializable {
     public static <T> RespResult<T> error(Integer code, String message) {
         return new RespResult<>(code, message, null);
     }
+
+    public static <T> RespResult<T> error(Integer code, String message, T data) {
+        return new RespResult<>(code, message, data);
+    }
 }

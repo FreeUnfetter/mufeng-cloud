@@ -5,6 +5,29 @@ spring:
     name: mufeng-generator
   profiles:
     active: local
+  config:
+    import:
+      - nacos:shared-conf.yaml?DEFAULT_GROUP
+    cloud:
+      nacos:
+        # ===== 配置中心设置 =====
+        config:
+          server-addr: ${spring.cloud.nacos.discovery.server-addr}
+          namespace: develop
+          group: DEFAULT_GROUP
+          file-extension: yaml
+          refresh-enabled: true
+
+        # ===== 服务发现设置 =====
+        discovery:
+          server-addr: localhost:8848
+          namespace: public
+          group: DEFAULT_GROUP
+          register-enabled: true
+          service: ${spring.application.name}
+          cluster-name: DEFAULT
+          metadata:
+            version: 1.0
   # 数据源
   datasource:
     druid:
@@ -34,16 +57,14 @@ spring:
         jdbc:
           time_zone: Asia/Shanghai # 设置JVM和数据库会话的时区
 
-  freemarker:
-    template-loader-path: classpath:/templates/
-    suffix: .ftl
-    charset: UTF-8
 logging:
+  config: http://${spring.cloud.nacos.config.server-addr}/nacos/v1/cs/configs?group=${spring.cloud.nacos.config.group}tenant=${spring.cloud.nacos.config.namespace}&username=${spring.cloud.nacos.username}&password=${spring.cloud.nacos.password}&dataId=logback-spring.xml
   level:
     # 显示SQL语句和参数
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     com.mufeng: DEBUG
+    root: info
 
 codegen:
   output-dir: generated-code/

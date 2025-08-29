@@ -1,5 +1,6 @@
 package com.mufeng.mufengGenerator.util;
 
+import com.mufeng.mufengConstants.constants.GeneratorConstant;
 import com.mufeng.mufengGenerator.database.MySQLDruidConnectionManager;
 import com.mufeng.mufengGenerator.domain.entity.ColumnInfo;
 import com.mufeng.mufengGenerator.domain.entity.TableInfo;
@@ -124,8 +125,8 @@ public class MysqlUtils {
      * @throws IOException
      */
     public void downLoadFile(HttpServletResponse response, String fileName) throws IOException {
-        response.setContentType("application/zip");
-        response.setHeader("Content-Disposition", "attachment; filename=" + fileName + ".zip");
+        response.setContentType(GeneratorConstant.CONTENT_TYPE);
+        response.setHeader(GeneratorConstant.HEADER, "attachment; filename=" + fileName + ".zip");
 
         try {
             ZipUtils.zipFolder(outputDir, response.getOutputStream());

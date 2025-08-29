@@ -12,6 +12,9 @@
     <artifactId>mufeng-common</artifactId>
 
     <properties>
+        <fastjson2.version>2.0.51</fastjson2.version>
+        <druid.version>1.2.23</druid.version>
+
         <velocity.version>2.3</velocity.version>
         <commons-io.version>2.11.0</commons-io.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
@@ -22,13 +25,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- 模板引擎 -->
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity-engine-core</artifactId>
-            <version>${velocity.version}</version>
         </dependency>
 
         <!-- Spring Data -->
@@ -48,6 +44,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+        <!-- Spring Data Envers -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-envers</artifactId>
+        </dependency>
+        <!-- Spring boot security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 
         <!-- 数据库驱动 -->
         <dependency>
@@ -55,20 +61,27 @@
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
+
         <!-- Druid 连接池 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-3-starter</artifactId>
-            <version>1.2.23</version>
+            <version>${druid.version}</version>
+        </dependency>
+
+        <!-- 模板引擎 -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>${velocity.version}</version>
         </dependency>
 
         <!-- Fastjson -->
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2</artifactId>
-            <version>2.0.51</version>
+            <version>${fastjson2.version}</version>
         </dependency>
-
 
         <!-- 工具类 -->
         <dependency>
@@ -84,6 +97,12 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>${commons-beanutils.version}</version>
+        </dependency>
+        <!--  常量  -->
+        <dependency>
+            <groupId>com.mufeng</groupId>
+            <artifactId>mufeng-constants</artifactId>
+            <version>1.0-0</version>
         </dependency>
     </dependencies>
 

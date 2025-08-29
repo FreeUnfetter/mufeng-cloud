@@ -3,6 +3,7 @@ package ${table.packageName}.repository;
 import ${table.packageName}.entity.${className};
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +17,7 @@ import java.util.List;
  * @date ${table.date}
  */
 public interface ${tableNameHigher}Repository extends JpaRepository<${tableNameHigher}, String>
-        , JpaSpecificationExecutor<${tableNameHigher}> {
+        , JpaSpecificationExecutor<${tableNameHigher}>
+        , RevisionRepository<DatabaseConfig, String, Integer>{
 
 }

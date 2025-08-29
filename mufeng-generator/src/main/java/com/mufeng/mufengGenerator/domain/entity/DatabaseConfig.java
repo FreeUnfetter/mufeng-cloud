@@ -3,11 +3,17 @@ package com.mufeng.mufengGenerator.domain.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import org.hibernate.envers.Audited;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Data
 @Entity
+@Audited
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "database_config")
 public class DatabaseConfig {
     /** id */
@@ -38,22 +44,27 @@ public class DatabaseConfig {
     /** 创建人 */
     private String createName;
     /** 创建时间 */
+    @CreatedDate
     private LocalDateTime createDate;
     /** 更新人 */
     private String updateName;
     /** 更新时间 */
+    @LastModifiedDate
     private LocalDateTime updateDate;
 
-    // 在持久化之前自动执行的方法
-    @PrePersist
-    protected void onCreate() {
-        createDate = LocalDateTime.now();
-        updateDate = LocalDateTime.now();
-    }
+    @Version
+    private Long version;
 
-    // 在更新之前自动执行的方法
-    @PreUpdate
-    protected void onUpdate() {
-        updateDate = LocalDateTime.now();
-    }
+//    // 在持久化之前自动执行的方法
+//    @PrePersist
+//    protected void onCreate() {
+//        createDate = LocalDateTime.now();
+//        updateDate = LocalDateTime.now();
+//    }
+//
+//    // 在更新之前自动执行的方法
+//    @PreUpdate
+//    protected void onUpdate() {
+//        updateDate = LocalDateTime.now();
+//    }
 }
